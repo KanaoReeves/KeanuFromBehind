@@ -2,8 +2,8 @@ from flask import Blueprint, jsonify
 from flask_autodoc import Autodoc
 
 login_api = Blueprint('login_api', __name__)
-from ..app import flask_app
-auto = Autodoc(flask_app)
+
+auto = Autodoc(app)
 
 
 @login_api.route('/login/spc')
