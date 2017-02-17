@@ -1,1 +1,1 @@
-web: gunicorn keanu.app:flask_app
+web: python runserver.py
