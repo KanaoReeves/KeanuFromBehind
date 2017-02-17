@@ -1,17 +1,18 @@
+#!/usr/bin/env python
 from flask import Blueprint, jsonify
 from flask_autodoc import Autodoc
 
-login_api = Blueprint('login_api', __name__)
+login_api = Blueprint('loginApi', __name__)
 
-auto = Autodoc(app)
+auto = Autodoc()
 
 
-@login_api.route('/login/spc')
+@login_api.route('/login/spec')
 def login_doc():
     return auto.html()
 
 
-@login_api.route('/login')
+@login_api.route('/login', methods=['GET', 'POST'])
 @auto.doc()
 def login() -> dict:
     """
