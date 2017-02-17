@@ -12,7 +12,7 @@ auto = Autodoc(flask_app)
 @flask_app.route('/spec', methods=['GET'])
 def spec():
     """
-    View spec for root API endpoints
+    Spec for root endpoints
     :return:
     """
     return auto.html()
