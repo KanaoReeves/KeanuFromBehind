@@ -1,15 +1,32 @@
+#!/usr/bin/env python
 from flask import Flask, jsonify
-from keanu.routes import login
+from flask_autodoc import Autodoc
+from keanu.routes.login import login_api
 
 flask_app = Flask(__name__)
 
-# flask_app.register_blueprint(spec_api)
-flask_app.register_blueprint(login.login_api)
+flask_app.register_blueprint(login_api)
+auto = Autodoc(flask_app)
 
 
-@flask_app.route('/spec')
+@flask_app.route('/spec', methods=['GET'])
 def spec():
-    return jsonify({})
+    """
+    Spec for root endpoints
+    :return:
+    """
+    return auto.html()
+
+
+@flask_app.route('/', methods=['GET'])
+@auto.doc()
+def root():
+    """
+    Root api to test if its working
+    :return:
+    """
+    return jsonify({'data': {'success': True}})
+
 
 if __name__ == "__main__":
     flask_app.run(debug=True)

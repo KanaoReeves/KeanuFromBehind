@@ -1,8 +1,7 @@
+from setuptools import setup, find_packages
 
-from setuptools import find_packages, setup
-
-setup(name="KeanuFromBehine",
+setup(name="KeanuFromBehind",
       description="Backend end for keanu's frontend",
       author="",
       packages=find_packages()
-      )
+)
