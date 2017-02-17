@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 from flask import Flask, jsonify
 from flask_autodoc import Autodoc
 
