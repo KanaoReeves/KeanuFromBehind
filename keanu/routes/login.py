@@ -12,11 +12,12 @@ def login_doc():
     return auto.html()
 
 
-@login_api.route('/login', methods=['GET', 'POST'])
+@login_api.route('/login', methods=['POST'])
 @auto.doc()
 def login() -> dict:
     """
     Login to the api
     :return:
     """
+    # TODO: Connect to db and verify user
     return jsonify({'data': {'success': True}})
