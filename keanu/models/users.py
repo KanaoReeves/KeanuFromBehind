@@ -3,9 +3,13 @@ from keanu.app import flask_db as db
 
 class PaymentInfo(db.Document):
     name = db.StringField(required=True)  # Name on Credit Card
+    cardType = db.numField(db.StringField(), 'VISA', 'MASTERCARD', 'AMEX')
     num = db.IntField(required=True)  # Credit Card Number
     cvNum = db.IntField(required=True)  # CVV Number on back of credit card
     expiry = db.DateTimeField(required=True)
+
+    def __str__(self):
+        return '%s %d %d'
 
 
 class UserFullName(db.Document):
@@ -27,12 +31,3 @@ class Users(db.Document):
     adminRights = db.BoolField(required=True)
     paymentInfo = db.DocumentField(PaymentInfo, required=True)
     address = db.Document(Address, required=True)
-
-
-
-
-
-
-    # description = db.StringField()
-    # catogery = db.StringField()
-    # tag = db.ListField(db.StringField())
