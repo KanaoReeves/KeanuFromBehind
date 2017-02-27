@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 from flask import Flask, jsonify
+from flask.ext.mongoalchemy import MongoAlchemy
 from flask_autodoc import Autodoc
 from keanu.routes.login import login_api
 
 flask_app = Flask(__name__)
+flask_app.config['MONGOALCHEMY_DATABASE'] = 'kanaoreeves'
+flask_db = MongoAlchemy(flask_app)
 
 flask_app.register_blueprint(login_api)
 auto = Autodoc(flask_app)
