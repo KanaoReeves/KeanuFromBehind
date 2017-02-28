@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os
 from flask import Flask, jsonify
 from flask_mongoalchemy import MongoAlchemy
 from flask_autodoc import Autodoc

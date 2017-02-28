@@ -1,15 +1,13 @@
 from keanu.app import flask_db as db
+from mongoalchemy.document import Index
 
 
 class PaymentInfo(db.Document):
     name = db.StringField(required=True)  # Name on Credit Card
-    cardType = db.numField(db.StringField(), 'VISA', 'MASTERCARD', 'AMEX')
+    cardType = db.EnumField(db.StringField(), 'VISA', 'MASTERCARD', 'AMEX')
     num = db.IntField(required=True)  # Credit Card Number
-    cvNum = db.IntField(required=True)  # CVV Number on back of credit card
-    expiry = db.DateTimeField(required=True)
-
-    def __str__(self):
-        return '%s %d %d'
+    cvNum = db.IntField(required=False)  # CVV Number on back of credit card
+    expiry = db.DateTimeField(required=False)
 
 
 class UserFullName(db.Document):
@@ -18,16 +16,20 @@ class UserFullName(db.Document):
 
 
 class Address(db.Document):
-    name = db.StringField(required=True)
     number = db.IntField(required=True)
+    name = db.StringField(required=True)
+    streetType = db.StringField(required=True)
     postalCode = db.StringField(required=True)
 
 
-class Users(db.Document):
-    username = db.StringField(required=True).unique()
+class User(db.Document):
+    config_collection_name = 'users'
+
+    username = db.StringField(required=True)
     password = db.StringField(required=True)
-    displayName = db.DocumentField(UserFullName, required=True)
+    displayName = db.DocumentField(UserFullName)
     email = db.StringField(required=True)
+    email_index = Index().ascending('email').unique()
     adminRights = db.BoolField(required=True)
-    paymentInfo = db.DocumentField(PaymentInfo, required=True)
-    address = db.Document(Address, required=True)
+    paymentInfo = db.DocumentField(PaymentInfo)
+    address = db.DocumentField(Address)
