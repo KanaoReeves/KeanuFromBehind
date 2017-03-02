@@ -4,8 +4,11 @@ cache:
 - pip
 python:
 - '3.6'
-- '3.6-dev'
+- '3.7-dev'
 install: pip install -r requirements.txt
 sudo: false
 script:
 - python -m unittest discover ./tests -p '*test*.py'
+env:
+  global:
+    secure: TPYt+nvH3gQDyNArOP2nBHHNjwx6Gj0sLHMq1oaL18hvhD3ij25UgQpmk4bMs9BTCtXe5Izf4RkZe2smKC4ZA0vcoUEsM0GOGGfcAIZ3bjdbF0K7oHugB6BG0KrJuoU1jHs0q+DmO+w5HKwR+fJlTR+YlZsUDINKT6jDH2Qs2W6o+vHZlrSaOHeYr44Kb/A+/YPkB3pGVjbyKKR8184SfUKqhkzdBrZ3mEY/7y8I12+rekjwxCwTQQp6Zw8YP/ukK8BkeWyNflIiXHe9uxKit8rlaMIf4Pd3jbKEdbrCLYA5NaOa96HCh2zDfq1VqXXbvWrq5yv9JkWwGX5iSyMQum+s3d0zzRYdWEoSy3OOjsXGP5WjsJ+5djBNMwXx7RTC1xaedsVu0v3q62ZysdZr+Q0S4OApCB2ZRBrzrdGjq+NZifW7/8vGoKxgbrsGUg6fADLPA3eZ9kZZOrxJJO2EbgdOzS7DGkHb/UN/TuPgt0T6npqGeYGkczzR7aijOs95cEOmI09aOUgXbgGgq3qfrZExiBHFaghQSSU3CbhX+58FqwqgEL2pD1N2MwhMct3ZyNt4FFh9EQTv1B3S5YKmRhAG7rJlUyzNVXiE9YKfhe7RvmvzfA+QkyVuO+j53M6aKlODmGsMNDR+VA4mCJlgyQcR4wVTGN1WiWTsK6mKWhA=
