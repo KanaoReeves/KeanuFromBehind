@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-from flask import Blueprint, jsonify
+import jwt, datetime
+from flask import Blueprint, jsonify, request
 from flask_autodoc import Autodoc
-# from keanu.models.users import User
-#import keanu.models.users as users
+
 
 login_api = Blueprint('loginApi', __name__)
 
@@ -22,6 +22,9 @@ def login() -> dict:
     :return:
     """
     # Import user here to avoid circular input
-    from keanu.models.users import User
-    # TODO: Connect to db and verify user
+    from keanu.models.users import User, Address, PaymentInfo, UserFullName
+    username: str = request.headers['username']
+    password: str = request.headers['password']
+    user = User.query.filter(User.username == username, User.password == password).first()
+
     return jsonify({'data': {'success': True}})
