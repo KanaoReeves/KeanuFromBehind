@@ -1,10 +1,12 @@
 #!/usr/bin/env python
+
 import jwt
 import datetime
 import json
 from jwt.algorithms import ECAlgorithm
 from flask import Blueprint, jsonify, request
 from flask_autodoc import Autodoc
+
 
 login_api = Blueprint('loginApi', __name__)
 
@@ -63,3 +65,4 @@ def login() -> dict:
     user.save()
 
     return jsonify({'data': {'token': jwt_token.decode("utf-8")}})
+
