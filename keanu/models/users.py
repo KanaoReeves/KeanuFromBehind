@@ -27,6 +27,7 @@ class User(db.Document):
 
     username = db.StringField(required=True)
     password = db.StringField(required=True)
+    token = db.StringField(required=False)
     displayName = db.DocumentField(UserFullName)
     email = db.StringField(required=True)
     email_index = Index().ascending('email').unique()
