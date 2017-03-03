@@ -1,17 +1,39 @@
 #!/usr/bin/env python
-from flask import Blueprint, jsonify
+import jwt
+import datetime
+import json
+from jwt.algorithms import ECAlgorithm
+from flask import Blueprint, jsonify, request
 from flask_autodoc import Autodoc
-# from keanu.models.users import User
-#import keanu.models.users as users
 
 login_api = Blueprint('loginApi', __name__)
 
 auto = Autodoc()
 
+# import User model here to avoid circular imports
+from keanu.models.users import User
+#
+
 
 @login_api.route('/login/spec')
 def login_doc():
+    """
+    Documentation for the /login route
+    :return:
+    """
     return auto.html()
+
+
+@login_api.route('/login/register', methods=['POST'])
+@auto.doc()
+def register() -> dict:
+    """
+    Register a new user!
+    :return:
+    """
+    username = request.headers['username']
+    password = request.headers['password']
+    return jsonify(jsonify({'data': {'success': True}}))
 
 
 @login_api.route('/login', methods=['POST'])
@@ -19,9 +41,25 @@ def login_doc():
 def login() -> dict:
     """
     Login to the api
-    :return:
+    Pass in the username and password in the header
+    A token is returned
+    {"data": {"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE0ODkxODUyMjAsInNvbWVQY"}}
+    :return: token
     """
-    # Import user here to avoid circular input
-    from keanu.models.users import User
-    # TODO: Connect to db and verify user
-    return jsonify({'data': {'success': True}})
+
+    username = request.headers['username']
+    password = request.headers['password']
+
+    # find user from database
+    user =  User.query.filter(User.username == username, User.password == password).first()
+
+    # generate a new token for the user for 1 week
+    jwt_token = jwt.encode({
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(weeks=1),
+        'somePayload': 'wowwww'},
+        'secret', algorithm='HS512')
+
+    user.token = jwt_token.decode("utf-8")
+    user.save()
+
+    return jsonify({'data': {'token': jwt_token.decode("utf-8")}})
