@@ -29,7 +29,7 @@ class TestLogin(unittest.TestCase):
         self.assertEqual(json.dumps(json_response['data']['user']), data, 'data returned is not the same')
 
     def test_login_token(self):
-        result = self.app.post('/login', headers={'username': 'aaron', 'password': 'password'})
+        result = self.app.post('/login', headers={'username': 'steve', 'password': 'smith'})
         json_response = json.loads(result.data)
         print(json_response)
         self.assertTrue(json_response['data']['token'] is not None, 'error with json')
