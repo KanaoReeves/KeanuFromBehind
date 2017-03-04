@@ -22,7 +22,7 @@ class TestLogin(unittest.TestCase):
     def test_login_token(self):
         result = self.app.post('/login', headers={'username': 'aaron', 'password': 'password'})
         json_response = json.loads(result.data)
-        self.assertTrue(json_response['data']['token'] is not None)
+        self.assertTrue(json_response['data']['token'] is not None, 'error with json '+json_response)
 
     def test_register_new_users(self):
         data = '{"address": {"name": "Main", "number": 123, "postalCode": "M3E5R1", "streetType": "Street"}, ' \
