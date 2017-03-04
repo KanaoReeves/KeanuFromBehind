@@ -33,7 +33,8 @@ def register() -> tuple:
                 name=request.json['paymentInfo']['name'],
                 cardType=request.json['paymentInfo']['cardType'],
                 num=request.json['paymentInfo']['num'],
-                expiry=datetime.datetime.strptime(request.json['paymentInfo']['expiry'], "%w/%m/%y %I:%M:%S %p UTC")
+                expiry=datetime.datetime.strptime(request.json['paymentInfo']['expiry'],
+                                                  "%w/%m/%y %I:%M:%S %p UTC")
             ),
             address=Address(
                 number=request.json['address']['number'],

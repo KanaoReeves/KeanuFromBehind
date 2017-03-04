@@ -26,6 +26,7 @@ class TestLogin(unittest.TestCase):
                '"expiry": "1/1/17 12:00:00 AM UTC", "name": "steve Smith", "num": 451535486}, "username": "aaron"}'
         result = self.app.post('/login/register', data=data, content_type='application/json')
         json_response = json.loads(result.data)
+
         self.assertEqual(json.dumps(json_response['data']['user']), data, 'data returned is not the same')
 
     def test_login_token(self):
