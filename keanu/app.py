@@ -26,7 +26,7 @@ def spec():
 @flask_app.before_request
 def before_request() -> tuple:
     from keanu.models.users import User
-    no_auth_paths = ['/', '/spec', '/login', '/register', '/favicon.ico']
+    no_auth_paths = ['/', '/spec', '/favicon.ico', '/login', '/login/register']
     if request.path not in no_auth_paths:
         token = request.headers['token']
         user = User.query.filter(User.token == token).first()
