@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, redirect, url_for
 from flask_mongoalchemy import MongoAlchemy
 from flask_autodoc import Autodoc
 from keanu.routes.login import login_api
@@ -21,6 +21,17 @@ def spec():
     :return:
     """
     return auto.html()
+
+
+@flask_app.before_request
+def before_request() -> tuple:
+    from keanu.models.users import User
+    no_auth_paths = ['/', '/spec', '/login', '/register', '/favicon.ico']
+    if request.path not in no_auth_paths:
+        token = request.headers['token']
+        user = User.query.filter(User.token == token).first()
+        if user is None:
+            return jsonify({'error': 'not a valid token'}), 401
 
 
 @flask_app.route('/', methods=['GET'])
