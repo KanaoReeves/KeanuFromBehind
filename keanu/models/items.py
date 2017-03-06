@@ -1,5 +1,4 @@
 from keanu.app import flask_db as db
-from mongoalchemy.document import Index
 
 
 class Item(db.Document):
