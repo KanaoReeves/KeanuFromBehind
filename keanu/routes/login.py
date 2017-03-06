@@ -10,6 +10,15 @@ login_api = Blueprint('loginApi', __name__)
 auto = Autodoc()
 
 
+@login_api.route('/login/spec')
+def login_doc():
+    """
+    Documentation for the /login route
+    :return:
+    """
+    return auto.html()
+
+
 @login_api.route('/login/register', methods=['POST'])
 @auto.doc()
 def register() -> tuple:
@@ -82,12 +91,3 @@ def login() -> tuple:
     user.save()
 
     return jsonify({'data': {'token': jwt_token.decode("utf-8")}}), 200
-
-
-@login_api.route('/login/spec')
-def login_doc():
-    """
-    Documentation for the /login route
-    :return:
-    """
-    return auto.html()
