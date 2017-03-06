@@ -1,7 +1,6 @@
 import unittest
 
 from keanu.app import flask_app
-from keanu.models.Items import Items
 
 
 class TestItems(unittest.TestCase):

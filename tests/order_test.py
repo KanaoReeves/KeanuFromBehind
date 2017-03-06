@@ -1,7 +1,6 @@
 import unittest
 
 from keanu.app import flask_app
-from keanu.models.Orders import Orders
 import datetime
 
 class TestOrders(unittest.TestCase):
