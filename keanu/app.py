@@ -71,5 +71,6 @@ def handel500(error):
     flask_app.logger.error(error)
     return jsonify({'error': error}), 500
 
+
 if __name__ == "__main__":
     flask_app.run(debug=True)
