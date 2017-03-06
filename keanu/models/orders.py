@@ -2,7 +2,7 @@ from keanu.app import flask_db as db
 from mongoalchemy.document import Index
 
 
-class Order(db.Document):
+class Orders(db.Document):
     id = db.IntField(required=True)
     items = db.StringField(required=True)
     total = db.DecimalField
