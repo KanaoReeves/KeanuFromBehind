@@ -49,14 +49,14 @@ def root():
 
 
 @flask_app.errorhandler(404)
-def handel404():
+def handel404(error):
     """
     Method to handle 404 error
     :return:
     """
     err_string = 'Route not found: '+request.path
     flask_app.logger.error(err_string)
-    return jsonify({'error': err_string}), 404
+    return jsonify({'error': err_string+' '+error}), 404
 
 
 @flask_app.errorhandler(400)
