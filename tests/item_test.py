@@ -1,7 +1,7 @@
 import unittest
 
 from keanu.app import flask_app
-from keanu.models.Items import Items, Tags
+from keanu.models.Items import Items
 
 
 class TestItems(unittest.TestCase):
@@ -11,7 +11,7 @@ class TestItems(unittest.TestCase):
         Setup app for testing
         :return:
         """
-       # self.app = flask_app.test_client()
+        self.app = flask_app.test_client()
         self.app.testing = True
 
     def tearDown(self):
@@ -25,7 +25,7 @@ class TestItems(unittest.TestCase):
         self.assertFalse(self.app is None)
 
     def test_add_new_item(self):
-        new_item = Item(
+        new_item = Items(
             id='8888',
             name='Test Item',
             description='This is just a test description',
