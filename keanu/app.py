@@ -25,9 +25,13 @@ def spec():
 
 @flask_app.before_request
 def before_request() -> tuple:
+    """
+    Checks if a token header in requests
+    :return:
+    """
     from keanu.models.users import User
     no_auth_paths = ['/', '/spec', '/favicon.ico', '/login', '/login/register']
-    if request.path not in no_auth_paths:
+    if request.path not in no_auth_paths and 'token' in request.headers:
         token = request.headers['token']
         user = User.query.filter(User.token == token).first()
         if user is None:
@@ -45,10 +49,9 @@ def root():
 
 
 @flask_app.errorhandler(404)
-def handel404(error):
+def handel404():
     """
     Method to handle 404 error
-    :param error:
     :return:
     """
     err_string = 'Route not found: '+request.path
@@ -62,6 +65,11 @@ def handel400(error):
     flask_app.logger.error(err_string)
     return jsonify({'error': err_string}), 400
 
+
+@flask_app.errorhandler(500)
+def handel500(error):
+    flask_app.logger.error(error)
+    return jsonify({'error': error}), 500
 
 if __name__ == "__main__":
     flask_app.run(debug=True)
