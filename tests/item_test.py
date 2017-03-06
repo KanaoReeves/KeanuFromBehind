@@ -1,6 +1,7 @@
 import unittest
 
 from keanu.app import flask_app
+from keanu.models.items import Item
 
 
 class TestItems(unittest.TestCase):
@@ -24,10 +25,10 @@ class TestItems(unittest.TestCase):
         self.assertFalse(self.app is None)
 
     def test_add_new_item(self):
-        new_item = Items(
-            id='8888',
+        new_item = Item(
             name='Test Item',
             description='This is just a test description',
+            imageURL="https://lh5.googleusercontent.com/wP139T6yGoUPC2t9mM7sgRDoU7oTwjOgHtT7WEYcbJFfo8KrmhieVU1X1lDUleVCi3H-2l7h=w1366-h638",
             price=9.99,
             calories=500,
             category='Entrees',
@@ -36,6 +37,6 @@ class TestItems(unittest.TestCase):
 
 
         new_item.save()
-        found_item = Items.query.filter(Items.id == new_item.id).first()
-        self.assertEqual(new_item.id, found_item.id, "Items not equal")
+        found_item = Item.query.filter(Item.name == new_item.name).first()
+        self.assertEqual(new_item.name, found_item.name, "Items not equal")
         new_item.remove()

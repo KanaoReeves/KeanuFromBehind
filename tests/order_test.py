@@ -1,6 +1,7 @@
 import unittest
 
 from keanu.app import flask_app
+from keanu.models.orders import Order
 import datetime
 
 class TestOrders(unittest.TestCase):
@@ -24,15 +25,14 @@ class TestOrders(unittest.TestCase):
         self.assertFalse(self.app is None)
 
     def test_add_new_order(self):
-        new_order = Orders(
-            id='8888',
+        new_order = Order(
             items=[123, 25, 33],
             total=29.99,
             userId=500,
-            date=datetime.now()
+            date=datetime.datetime.now()
         )
 
         new_order.save()
-        found_order = Orders.query.filter(Orders.id == new_order.id).first()
-        self.assertEqual(new_order.id, found_order.id, "Order is not equal")
+        found_order = Order.query.filter(Order.items == new_order.items).first()
+        self.assertEqual(new_order.items, found_order.items, "Order is not equal")
         new_order.remove()
