@@ -2,8 +2,7 @@ import unittest
 import json
 
 from keanu.app import flask_app
-from keanu.models.orders import Order
-import datetime
+
 
 class TestOrderRoute(unittest.TestCase):
 
