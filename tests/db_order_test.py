@@ -1,11 +1,10 @@
 import unittest
-import json
 
 from keanu.app import flask_app
 from keanu.models.orders import Order
 import datetime
 
-class TestOrderRoute(unittest.TestCase):
+class TestOrders(unittest.TestCase):
 
     def setUp(self):
         """
@@ -25,7 +24,15 @@ class TestOrderRoute(unittest.TestCase):
     def test_app_exists(self):
         self.assertFalse(self.app is None)
 
-    def test_get_user_orders(self):
-        result = self.app.get('/order')
-        json_data = json.loads(result.data)
-        self.assertTrue(len(json_data['data']['orders']) > 1, 'no orders in db')
+    def test_add_new_order(self):
+        new_order = Order(
+            items=[123, 25, 33],
+            total=29.99,
+            userId=500,
+            date=datetime.datetime.now()
+        )
+
+        new_order.save()
+        found_order = Order.query.filter(Order.items == new_order.items).first()
+        self.assertEqual(new_order.items, found_order.items, "Order is not equal")
+        #new_order.remove()

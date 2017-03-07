@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import json
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 from flask_autodoc import Autodoc
 
 order_api = Blueprint('orderApi', __name__)
@@ -20,7 +20,7 @@ def login_doc():
 
 @order_api.route('/order', methods=['GET'])
 @auto.doc()
-def get_all_orders() -> dict:
+def get_user_orders() -> dict:
     """
     returns all the orders for user as a json array
     :return:
