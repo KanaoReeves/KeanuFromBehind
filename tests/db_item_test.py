@@ -35,7 +35,6 @@ class TestItems(unittest.TestCase):
             tags=['bread', 'healthy']
         )
 
-
         new_item.save()
         found_item = Item.query.filter(Item.name == new_item.name).first()
         self.assertEqual(new_item.name, found_item.name, "Items not equal")
