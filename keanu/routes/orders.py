@@ -2,12 +2,14 @@
 import json
 from flask import Blueprint, jsonify
 from flask_autodoc import Autodoc
+from keanu.models.orders import Order
 
 order_api = Blueprint('orderApi', __name__)
 
 auto = Autodoc()
 
-from keanu.models.orders import Order
+
+
 
 @order_api.route('/order/spec')
 def login_doc():
@@ -35,7 +37,7 @@ def get_user_orders() -> dict:
         orders_list.append({
             "_id": str(order.mongo_id),
             "items": order.items,
-            "total" : order.total,
+            "total": order.total,
             "userId": order.userId,
             "date": order.date
         })
