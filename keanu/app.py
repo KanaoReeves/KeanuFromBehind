@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, url_for
 from flask_mongoalchemy import MongoAlchemy
 from flask_autodoc import Autodoc
 from keanu.routes.login import login_api
@@ -32,8 +32,13 @@ def before_request() -> tuple:
     :return:
     """
     from keanu.models.users import User
-    no_auth_paths = ['/', '/spec', '/favicon.ico', '/item', '/item/58be0265f188127b8fd2af52', '/login', '/login/register']
-    if request.path not in no_auth_paths and 'token' in request.headers:
+    no_auth_paths = ['/spec', '/favicon.ico', '/item', '/login']
+    auth_required = True
+    for path in no_auth_paths:
+        if request.path.startswith(path):
+            auth_required = False
+
+    if auth_required and 'token' in request.headers:
         token = request.headers['token']
         user = User.query.filter(User.token == token).first()
         if user is None:

@@ -1,11 +1,9 @@
 import unittest
-
+import json
 from keanu.app import flask_app
-from keanu.models.items import Item
 
 
-class TestItems(unittest.TestCase):
-
+class TestItemRoute(unittest.TestCase):
     def setUp(self):
         """
         Setup app for testing
@@ -24,19 +22,17 @@ class TestItems(unittest.TestCase):
     def test_app_exists(self):
         self.assertFalse(self.app is None)
 
-    def test_add_new_item(self):
-        new_item = Item(
-            name='Test Item',
-            description='This is just a test description',
-            imageURL="https://lh5.googleusercontent.com/wP139T6yGoUPC2t9mM7sgRDoU7oTwjOgHtT7WEYcbJFfo8KrmhieVU1X1lDUleVCi3H-2l7h=w1366-h638",
-            price=9.99,
-            calories=500,
-            category='Entrees',
-            tags=['bread', 'healthy']
-        )
+    def test_get_all_items(self):
+        result = self.app.get('/item')
+        json_data = json.loads(result.data)
+        self.assertTrue(len(json_data['data']['items']) > 1, 'no items in db')
 
+    def test_get_item_by_id(self):
+        result = self.app.get('/item/id/58be0265f188127b8fd2af52')
+        json_data = json.loads(result.data)
+        self.assertTrue(json_data['data']['item'] is not None, 'no item by id found')
 
-        new_item.save()
-        found_item = Item.query.filter(Item.name == new_item.name).first()
-        self.assertEqual(new_item.name, found_item.name, "Items not equal")
-        new_item.remove()
+    def test_get_item_by_category(self):
+        result = self.app.get('/item/category/Starter')
+        json_data = json.loads(result.data)
+        self.assertTrue(json_data['data']['items'] is not None, 'no item by id found')
