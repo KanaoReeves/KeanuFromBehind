@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 import os
-from flask import Flask, jsonify, request, redirect, url_for
+from flask import Flask, jsonify, request
 from flask_mongoalchemy import MongoAlchemy
 from flask_autodoc import Autodoc
 from keanu.routes.login import login_api
+from keanu.routes.items import item_api
 
 flask_app = Flask(__name__)
 flask_app.config['MONGOALCHEMY_CONNECTION_STRING'] = os.getenv('DBURI', 'mongodb://localhost/kanaoreeves')
@@ -11,6 +12,7 @@ flask_app.config['MONGOALCHEMY_DATABASE'] = 'kanaoreeves'
 flask_db = MongoAlchemy(flask_app)
 
 flask_app.register_blueprint(login_api)
+flask_app.register_blueprint(item_api)
 auto = Autodoc(flask_app)
 
 
@@ -30,7 +32,7 @@ def before_request() -> tuple:
     :return:
     """
     from keanu.models.users import User
-    no_auth_paths = ['/', '/spec', '/favicon.ico', '/login', '/login/register']
+    no_auth_paths = ['/', '/spec', '/favicon.ico', '/item', '/login', '/login/register']
     if request.path not in no_auth_paths and 'token' in request.headers:
         token = request.headers['token']
         user = User.query.filter(User.token == token).first()
