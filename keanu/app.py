@@ -42,7 +42,8 @@ def before_request() -> tuple:
     for path in no_auth_paths:
         if request.path.startswith(path):
             auth_required = False
-
+    if '/' is request.path:
+        auth_required = False
     if auth_required and 'token' in request.headers:
         token = request.headers['token']
         user = User.query.filter(User.token == token).first()
