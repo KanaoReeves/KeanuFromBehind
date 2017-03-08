@@ -6,6 +6,6 @@ class Order(db.Document):
 
     items = db.ListField(db.IntField(),required=True)
     total = db.FloatField(required=True)
-    userId = db.IntField(required=True)
+    userId = db.StringField(required=True)
     date = db.DateTimeField(required=True)
 
