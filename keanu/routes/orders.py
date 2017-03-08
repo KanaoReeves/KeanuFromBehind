@@ -9,8 +9,6 @@ order_api = Blueprint('orderApi', __name__)
 auto = Autodoc()
 
 
-
-
 @order_api.route('/order/spec')
 def order_doc():
     """
