@@ -2,7 +2,6 @@
 import json
 from flask import Blueprint, jsonify, request
 from flask_autodoc import Autodoc
-from keanu.models.orders import Order
 
 order_api = Blueprint('orderApi', __name__)
 
@@ -25,6 +24,7 @@ def get_user_orders() -> dict:
     returns all the orders for user as a json array
     :return:
     """
+    from keanu.models.orders import Order
     from keanu.models.users import User
     # get all orders
     orders = Order.query.filter(User.request.headers['_id'])
