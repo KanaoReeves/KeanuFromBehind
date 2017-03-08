@@ -2,6 +2,7 @@
 import json
 from flask import Blueprint, jsonify, request
 from flask_autodoc import Autodoc
+from keanu.routes.login import login_api
 
 order_api = Blueprint('orderApi', __name__)
 
@@ -25,21 +26,27 @@ def get_user_orders() -> dict:
     :return:
     """
     from keanu.models.orders import Order
-    from keanu.models.users import User
+    #from keanu.models.users import User
     # get all orders
-    orders = Order.query.filter(User.request.headers['_id'])
-    # create orders list
-    orders_list = []
-    # create response
-    for order in orders:
-        orders_list.append({
-            "_id": str(order.mongo_id),
-            "items": order.items,
-            "total": order.total,
-            "userId": order.userId,
-            "date": order.date
-        })
-    return jsonify({'data': {'orders': orders_list}})
+    if ('_Id' in request.headers) :
+        id = request.headers['_id']
+        orders = Order.query.filter(id)
+        # create orders list
+        orders_list = []
+        # create response
+        for order in orders:
+            orders_list.append({
+                "_id": str(order.mongo_id),
+                "items": order.items,
+                "total": order.total,
+                "userId": order.userId,
+                "date": order.date
+            })
+        return jsonify({'data': {'orders': orders_list}})
+
+    else:
+        return jsonify({'error': 'user not signed in'}), 401
+
 
 
 @order_api.route('/order/add', methods=['POST'])
