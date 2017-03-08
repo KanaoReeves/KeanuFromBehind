@@ -27,6 +27,7 @@ def get_user_orders() -> dict:
     """
     from keanu.models.orders import Order
     #from keanu.models.users import User
+
     # get all orders
     if ('_Id' in request.headers) :
         id = request.headers['_id']
@@ -44,8 +45,6 @@ def get_user_orders() -> dict:
             })
         return jsonify({'data': {'orders': orders_list}})
 
-    else:
-        return jsonify({'error': 'user not signed in'}), 401
 
 
 
@@ -53,6 +52,7 @@ def get_user_orders() -> dict:
 @auto.doc()
 def add_order() -> tuple:
 
+    from keanu.models.orders import Order
     if request.json is not None:
         # find specific item
         new_order = Order(

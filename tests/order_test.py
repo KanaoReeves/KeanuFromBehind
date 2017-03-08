@@ -25,6 +25,9 @@ class TestOrderRoute(unittest.TestCase):
         self.assertFalse(self.app is None)
 
     def test_get_user_orders(self):
-        result = self.app.get('/order')
-        json_data = json.loads(result.data)
-        self.assertTrue(len(json_data['data']['orders']) > 1, 'no orders in db')
+        login = self.app.post('/login', headers={'username': 'steve', 'password': 'smith'})
+        json_response = json.loads(login.data)
+        if json_response['data']['token'] is not None:
+            result = self.app.get('/order')
+            json_data = json.loads(result.data)
+            self.assertTrue(len(json_data['data']['orders']) > 1, 'no orders in db')
