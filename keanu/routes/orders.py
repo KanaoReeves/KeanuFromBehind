@@ -26,19 +26,20 @@ def get_user_orders() -> dict:
     :return:
     """
     from keanu.models.orders import Order
-    #from keanu.models.users import User
+    from keanu.models.users import User
 
     # get all orders
-    if ('_Id' in request.headers) :
-        id = request.headers['_id']
-        orders = Order.query.filter(id)
+    if ('token' in request.headers) :
+        token = request.headers['token']
+        user = User.query.filter(User.token == token).first()
+        orders = Order.query.filter(Order.userId == user.mongo_id)
         # create orders list
         orders_list = []
         # create response
         for order in orders:
             orders_list.append({
                 "_id": str(order.mongo_id),
-                "items": order.items,
+                "items": json.dumps(order.items),
                 "total": order.total,
                 "userId": order.userId,
                 "date": order.date

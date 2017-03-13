@@ -47,6 +47,7 @@ def before_request() -> tuple:
     if auth_required and 'token' in request.headers:
         token = request.headers['token']
         user = User.query.filter(User.token == token).first()
+
         if user is None:
             return jsonify({'error': 'not a valid token'}), 401
 
