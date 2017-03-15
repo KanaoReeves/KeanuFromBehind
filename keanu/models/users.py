@@ -26,6 +26,7 @@ class User(db.Document):
     config_collection_name = 'users'
 
     username = db.StringField(required=True)
+    username_index = Index().ascending('username').unique()
     password = db.StringField(required=True)
     token = db.StringField(required=False)
     displayName = db.DocumentField(UserFullName)
