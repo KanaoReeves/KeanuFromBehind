@@ -48,21 +48,18 @@ def get_user_orders() -> dict:
         return jsonify({'data': {'orders': orders_list}})
 
 
-
-
 @order_api.route('/order/add', methods=['POST'])
 @auto.doc()
 def add_order() -> tuple:
-
     from keanu.models.orders import Order
     if request.json is not None:
         # find specific item
         new_order = Order(
-                items= request.json['items'],
-                total= request.json['total'],
-                userId= request.json['userId'],
-                delivery= request.json['delivery'],
-                date= request.json['date']
+            items=request.json['items'],
+            total=request.json['total'],
+            userId=request.json['userId'],
+            delivery=request.json['delivery'],
+            date=request.json['date']
         )
         new_order.save()
         return jsonify({'data': {'order': request.json}})
