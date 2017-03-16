@@ -8,6 +8,6 @@ class Order(db.Document):
     total = db.FloatField(required=True)
     userId = db.StringField(required=True)
     delivery = db.BoolField(required=True)
-    date = db.IntField(required=True)
+    date = db.FloatField(required=True)
 
 

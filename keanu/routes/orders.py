@@ -32,7 +32,7 @@ def get_user_orders() -> dict:
     if ('token' in request.headers) :
         token = request.headers['token']
         user = User.query.filter(User.token == token).first()
-        orders = Order.query.filter(Order.userId == user.mongo_id)
+        orders = Order.query.filter(Order.userId == str(user.mongo_id))
         # create orders list
         orders_list = []
         # create response
@@ -42,6 +42,7 @@ def get_user_orders() -> dict:
                 "items": json.dumps(order.items),
                 "total": order.total,
                 "userId": order.userId,
+                "delivery": order.delivery,
                 "date": order.date
             })
         return jsonify({'data': {'orders': orders_list}})
@@ -60,6 +61,7 @@ def add_order() -> tuple:
                 items= request.json['items'],
                 total= request.json['total'],
                 userId= request.json['userId'],
+                delivery= request.json['delivery'],
                 date= request.json['date']
         )
         new_order.save()

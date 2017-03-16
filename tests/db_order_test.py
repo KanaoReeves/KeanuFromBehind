@@ -2,7 +2,7 @@ import unittest
 
 from keanu.app import flask_app
 from keanu.models.orders import Order
-import datetime
+import time
 
 
 class TestOrders(unittest.TestCase):
@@ -30,10 +30,11 @@ class TestOrders(unittest.TestCase):
             items=["123", "25", "33"],
             total=29.99,
             userId='58bda399c2e2222840edddb2',
-            date=datetime.datetime.now()
+            delivery=True,
+            date=time.time()
         )
 
         new_order.save()
         found_order = Order.query.filter(Order.items == new_order.items).first()
         self.assertEqual(new_order.items, found_order.items, "Order is not equal")
-        new_order.remove()
+        #new_order.remove()
