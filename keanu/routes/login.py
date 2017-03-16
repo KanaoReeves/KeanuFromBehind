@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import jwt
 import datetime
+from werkzeug.security import check_password_hash, generate_password_hash
 from flask import Blueprint, jsonify, request
 from flask_autodoc import Autodoc
 
@@ -31,7 +32,7 @@ def register() -> tuple:
     if request.json is not None:
         new_user = User(
             username=request.json['username'],
-            password=request.json['password'],
+            password=generate_password_hash(request.json['password']),
             displayName=UserFullName(
                 firstName=request.json['displayName']['firstName'],
                 lastName=request.json['displayName']['lastName']
@@ -41,12 +42,12 @@ def register() -> tuple:
             paymentInfo=PaymentInfo(
                 name=request.json['paymentInfo']['name'],
                 cardType=request.json['paymentInfo']['cardType'],
-                num=request.json['paymentInfo']['num'],
+                num=int(request.json['paymentInfo']['num']),
                 expiry=datetime.datetime.strptime(request.json['paymentInfo']['expiry'],
                                                   "%w/%m/%y %I:%M:%S %p UTC")
             ),
             address=Address(
-                number=request.json['address']['number'],
+                number=int(request.json['address']['number']),
                 name=request.json['address']['name'],
                 streetType=request.json['address']['streetType'],
                 postalCode=request.json['address']['postalCode']
@@ -74,12 +75,17 @@ def login() -> tuple:
         username = request.headers['username']
         password = request.headers['password']
     else:
-        return jsonify({'error': 'no username or password provided'}), 401
+        return jsonify({'error': 'no username or password provided'}), 403
 
     # find user from database
-    user = User.query.filter(User.username == username, User.password == password).first()
+    user = User.query.filter(User.username == username).first()
     if user is None:
-        return jsonify({'error': 'wrong username or password'}), 401
+        return jsonify({'error': 'wrong username or password'}), 403
+    else:
+        # verify password
+        if not check_password_hash(user.password, password):
+            return jsonify({'error': 'wrong username or password'}), 403
+
 
     # generate a new token for the user for 1 week
     jwt_token = jwt.encode({
