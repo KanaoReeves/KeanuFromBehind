@@ -84,3 +84,25 @@ def get_item_by_category(category) -> tuple:
             "tags": item.tags
         })
     return jsonify({'data': {'items': items_list}})
+
+
+@item_api.route('/admin/item/add', methods=['POST'])
+@auto.doc()
+def add_new_item():
+    from keanu.models.items import Item
+    #
+    if request.json is not None:
+        new_item = Item(
+            name=request.json['name'],
+            description=request.json['description'],
+            imageURL=request.json['imageURL'],
+            price=request.json['price'],
+            calories=request.json['calories'],
+            category=request.json['category'],
+            tags=request.json['tags']
+        )
+        new_item.save()
+
+        return jsonify({'data': {'item': request.json}})
+    else:
+        return jsonify({'error': 'invalid item'+request.json})
