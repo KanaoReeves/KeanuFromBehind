@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import json
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, g
 from flask_autodoc import Autodoc
 
 item_api = Blueprint('itemApi', __name__)
@@ -88,10 +88,9 @@ def get_item_by_category(category) -> tuple:
 
 @item_api.route('/admin/item/add', methods=['POST'])
 @auto.doc()
-def add_new_item():
+def add_new_item() -> tuple:
     from keanu.models.items import Item
-    #
-    if request.json is not None:
+    if request.json is not None and g.is_admin:
         new_item = Item(
             name=request.json['name'],
             description=request.json['description'],
@@ -105,4 +104,18 @@ def add_new_item():
 
         return jsonify({'data': {'item': request.json}})
     else:
-        return jsonify({'error': 'invalid item'+request.json})
+        return jsonify({'error': 'invalid item'+request.json}), 403
+
+
+@item_api.route('/admin/item/delete/<item_id>', methods=['POST'])
+@auto.doc()
+def delete_item(item_id):
+    from keanu.models.items import Item
+    # search for item by id
+    item = Item.query.get(str(item_id))
+    if item is not None and g.is_admin:
+        # remove item
+        item.remove()
+        return jsonify({'data': {'success': True}})
+    else:
+        return jsonify({'error': 'No item found with id '+item_id})
