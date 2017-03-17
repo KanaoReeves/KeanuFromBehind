@@ -4,6 +4,10 @@ from keanu.app import flask_app
 
 
 class TestItemRoute(unittest.TestCase):
+
+    test_item = '{"name": "testItem101", "description": "this is a description", "imageURL": "https://example.com", ' \
+               '"price": 33.95, "calories": 500, "category": "Starter", "tags": ["asdf", "sdfsdf", "sdfs"]}'
+
     def setUp(self):
         """
         Setup app for testing
@@ -36,10 +40,3 @@ class TestItemRoute(unittest.TestCase):
         result = self.app.get('/item/category/Starter')
         json_data = json.loads(result.data)
         self.assertTrue(json_data['data']['items'] is not None, 'no item by id found')
-
-    def test_admin_add_item(self):
-        data = '{"name": "items1", "description": "this is a description", "imageURL": "https://example.com", ' \
-               '"price": 33.95, "calories": 500, "category": "Starter", "tags": ["asdf", "sdfsdf", "sdfs"]}'
-        result = self.app.post('/admin/item/add', data=data, content_type='application/json')
-        json_data = json.loads(result.data)
-        self.assertEqual(json_data['data']['item'], json.loads(data), 'add item data not the same')
