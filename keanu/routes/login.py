@@ -5,7 +5,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flask import Blueprint, jsonify, request
 from flask_autodoc import Autodoc
 
-
 login_api = Blueprint('loginApi', __name__)
 
 auto = Autodoc()
@@ -86,7 +85,6 @@ def login() -> tuple:
         if not check_password_hash(user.password, password):
             return jsonify({'error': 'wrong username or password'}), 403
 
-
     # generate a new token for the user for 1 week
     jwt_token = jwt.encode({
         'exp': datetime.datetime.utcnow() + datetime.timedelta(weeks=1),
@@ -96,4 +94,11 @@ def login() -> tuple:
     user.token = jwt_token.decode("utf-8")
     user.save()
 
-    return jsonify({'data': {'token': jwt_token.decode("utf-8")}}), 200
+    return jsonify(
+        {
+            'data': {
+                'token': jwt_token.decode("utf-8"),
+                'adminRights': user.adminRights
+            }
+        }
+    )
