@@ -37,3 +37,19 @@ class TestLogin(unittest.TestCase):
         result = self.app.post('/login', headers={'username': 'steve', 'password': 'smith'})
         json_response = json.loads(result.data)
         self.assertTrue(json_response['data']['token'] is not None, 'error with json: ('+json.dumps(json_response)+')')
+
+    def test_admin_register(self):
+        data = '{"username": "aaron","password": "password","displayName": {"firstName": "Aaron",' \
+               '"lastName": "Fernandes"},"email": "aaron@example.com","adminRights": true, ' \
+               '"paymentInfo": {"name": "Aaron Fernandes","cardType": "VISA","num": 451535486,' \
+               '"expiry": "1/1/17 12:00:00 AM UTC"},"address":{"number": 345,"name": "Fake","streetType": ' \
+               '"Street","postalCode": "M3H5R1"}}'
+        result = self.app.post('/login/register', data=data, content_type='application/json')
+        json_response = json.loads(result.data)
+
+        self.assertTrue(json.dumps(json_response['data']['user']['adminRights']), 'admin register failed')
+
+    def test_admin_login(self):
+        result = self.app.post('/login', headers={'username': 'aaron', 'password': 'password'})
+        json_response = json.loads(result.data)
+        self.assertTrue(json_response['data']['adminRights'], 'error with json: ('+json.dumps(json_response)+')')
