@@ -23,7 +23,7 @@ class TestOrderRoute(unittest.TestCase):
     def test_app_exists(self):
         self.assertFalse(self.app is None)
 
-    def test_add_new_order(self):
+    def test_add_new_order_route(self):
         data = '{"date": "1.4896756223270907E9", "delivery": "True", "items": ["123", "25", "33"], ' \
                '"total": "29.99", "userId": "58bda399c2e2222840edddb2"}'
 
@@ -36,6 +36,6 @@ class TestOrderRoute(unittest.TestCase):
         json_response = json.loads(login.data)
         if json_response['data']['token'] is not None:
              result = self.app.get('/order', headers={
-                'token': json_response['data']['token']})  # TODO pass the token to the order route
+                'token': json_response['data']['token']})
              json_data = json.loads(result.data)
              self.assertTrue(len(json_data['data']['orders']) is not None, "no orders in db")
