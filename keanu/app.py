@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
-from flask import Flask, jsonify, request
-from flask_cors import CORS, cross_origin
+from flask import Flask, jsonify, request, g
+from flask_cors import CORS
 from flask_mongoalchemy import MongoAlchemy
 from flask_autodoc import Autodoc
 from keanu.routes.login import login_api
@@ -47,6 +47,11 @@ def before_request() -> tuple:
         user = User.query.filter(User.token == token).first()
         if user is None:
             return jsonify({'error': 'not a valid token'}), 401
+        else:
+            g.user_id = user.mongo_id
+            g.is_admin = user.adminRights
+    elif auth_required and 'token' not in request.headers:
+        return jsonify({'error': 'no token provided'})
 
 
 @flask_app.route('/', methods=['GET'])
