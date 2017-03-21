@@ -29,23 +29,23 @@ def get_user_orders() -> dict:
     from keanu.models.users import User
 
     # get all orders
-    if ('token' in request.headers) :
+    if 'token' in request.headers :
         token = request.headers['token']
         user = User.query.filter(User.token == token).first()
-        orders = Order.query.filter(Order.userId == str(user.mongo_id))
+        orders = Order.query.filter(Order.userId == str(user.mongo_id)).all()
         # create orders list
         orders_list = []
         # create response
         for order in orders:
             orders_list.append({
                 "_id": str(order.mongo_id),
-                "items": json.dumps(order.items),
-                "total": order.total,
-                "userId": order.userId,
-                "delivery": order.delivery,
+                "items": str(json.dumps(order.items)),
+                "total": str(order.total),
+                "userId": str(order.userId),
+                "delivery": str(order.delivery),
                 "date": order.date
             })
-        return jsonify({'data': {'orders': orders_list}})
+        return jsonify({'data' : {'orders': orders_list}})
 
 
 @order_api.route('/order/add', methods=['POST'])
@@ -56,12 +56,12 @@ def add_order() -> tuple:
         # find specific item
         new_order = Order(
             items=request.json['items'],
-            total=request.json['total'],
+            total=float(request.json['total']),
             userId=request.json['userId'],
-            delivery=request.json['delivery'],
-            date=request.json['date']
+            delivery=bool(request.json['delivery']),
+            date=float(request.json['date'])
         )
         new_order.save()
-        return jsonify({'data': {'order': request.json}})
+        return jsonify({'data': {'orders': request.json}})
     else:
         return jsonify({'error': 'no order placed'}), 401

@@ -24,11 +24,12 @@ class TestOrderRoute(unittest.TestCase):
         self.assertFalse(self.app is None)
 
     def test_add_new_order(self):
-        data = '{"items":"["123", "25", "33"]", "total":"29.99","userId":"58bda399c2e2222840edddb2",' \
-               '"delivery":"True", "date":"1.4896756223270907E9"}'
+        data = '{"date": "1.4896756223270907E9", "delivery": "True", "items": ["123", "25", "33"], ' \
+               '"total": "29.99", "userId": "58bda399c2e2222840edddb2"}'
+
         result = self.app.post('/order/add', data=data, content_type='application/json')
         json_response = json.loads(result.data)
-        self.assertEqual(json.dumps(json_response['data']['user']), data, 'data returned is not the same')
+        self.assertEqual(json.dumps(json_response['data']['orders']), data, 'data returned is not the same')
 
     def test_get_user_orders(self):
         login = self.app.post('/login', headers={'username': 'steve', 'password': 'smith'})
