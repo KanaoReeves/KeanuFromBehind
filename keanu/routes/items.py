@@ -102,7 +102,7 @@ def add_new_item() -> tuple:
         )
         new_item.save()
 
-        return jsonify({'data': {'item': request.json}})
+        return jsonify({'data': {'item': request.json, 'itemId': str(new_item.mongo_id)}})
     else:
         return jsonify({'error': 'invalid item'+request.json}), 403
 
