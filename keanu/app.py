@@ -6,6 +6,7 @@ from flask_mongoalchemy import MongoAlchemy
 from flask_autodoc import Autodoc
 from keanu.routes.login import login_api
 from keanu.routes.items import item_api
+from keanu.routes.customer import customer_api
 
 flask_app = Flask(__name__)
 flask_app.config['MONGOALCHEMY_CONNECTION_STRING'] = os.getenv('DBURI', 'mongodb://localhost/kanaoreeves')
@@ -16,6 +17,8 @@ CORS(flask_app)
 
 flask_app.register_blueprint(login_api)
 flask_app.register_blueprint(item_api)
+flask_app.register_blueprint(customer_api)
+
 auto = Autodoc(flask_app)
 
 
