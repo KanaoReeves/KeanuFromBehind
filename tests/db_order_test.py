@@ -37,4 +37,4 @@ class TestOrders(unittest.TestCase):
         new_order.save()
         found_order = Order.query.filter(Order.items == new_order.items).first()
         self.assertEqual(new_order.items, found_order.items, "Order is not equal")
-        #new_order.remove()
+        new_order.remove()
