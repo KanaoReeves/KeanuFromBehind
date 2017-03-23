@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import json
 from flask import Blueprint, jsonify, request, g
 from flask_autodoc import Autodoc
 
