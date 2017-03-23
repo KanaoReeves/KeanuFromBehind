@@ -29,7 +29,7 @@ class TestOrderRoute(unittest.TestCase):
         data = '{"date": "1.4896756223270907E9", "delivery": "True", "items": [["123", "5"], ["25", "2"], ["33", "1"]], ' \
                '"total": "29.99", "userId": "58bda399c2e2222840edddb2"}'
 
-        result = self.app.post('/order/add', headers={ 'token': json_login['data']['token'] },data=data, content_type='application/json')
+        result = self.app.post('/order/add', headers={'token': json_login['data']['token']}, data=data, content_type='application/json')
         json_response = json.loads(result.data)
         self.assertEqual(json.dumps(json_response['data']['orders']), data, 'data returned is not the same')
 
