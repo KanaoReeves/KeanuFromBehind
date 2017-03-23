@@ -27,7 +27,7 @@ class TestOrders(unittest.TestCase):
 
     def test_add_new_order(self):
         new_order = Order(
-            items=["123", "25", "33"],
+            items=[["123", "5"], ["25", "2"], ["33", "1"]],
             total=29.99,
             userId='58caac47c2e22214c80401ab',
             delivery=True,
@@ -37,4 +37,4 @@ class TestOrders(unittest.TestCase):
         new_order.save()
         found_order = Order.query.filter(Order.items == new_order.items).first()
         self.assertEqual(new_order.items, found_order.items, "Order is not equal")
-        new_order.remove()
+        #new_order.remove()
