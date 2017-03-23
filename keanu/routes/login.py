@@ -64,7 +64,7 @@ def login() -> tuple:
     """
     Login to the api
     Pass in the username and password in the header
-    A token is retugrned
+    A token is returned
     {"data": {"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE0ODkxODUyMjAsInNvbWVQY"}}
     :return: token
     """
