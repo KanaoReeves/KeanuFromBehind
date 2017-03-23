@@ -37,6 +37,9 @@ def before_request() -> tuple:
     Checks if a token header in requests
     :return:
     """
+    flask_app.logger.debug('Headers: %s', request.headers)
+    flask_app.logger.debug('Body: %s', request.get_data())
+
     from keanu.models.users import User
     no_auth_paths = ['/spec', '/favicon.ico', '/item', '/login']
     auth_required = True

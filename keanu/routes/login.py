@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import jwt
 import datetime
+import logging
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask import Blueprint, jsonify, request
 from flask_autodoc import Autodoc
