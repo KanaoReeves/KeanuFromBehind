@@ -8,6 +8,8 @@ from keanu.routes.login import login_api
 from keanu.routes.items import item_api
 from keanu.routes.customer import customer_api
 
+from keanu.routes.orders import order_api
+
 flask_app = Flask(__name__)
 flask_app.config['MONGOALCHEMY_CONNECTION_STRING'] = os.getenv('DBURI', 'mongodb://localhost/kanaoreeves')
 flask_app.config['MONGOALCHEMY_DATABASE'] = 'kanaoreeves'
@@ -17,6 +19,7 @@ CORS(flask_app)
 
 flask_app.register_blueprint(login_api)
 flask_app.register_blueprint(item_api)
+flask_app.register_blueprint(order_api)
 flask_app.register_blueprint(customer_api)
 
 auto = Autodoc(flask_app)
@@ -51,13 +54,14 @@ def before_request() -> tuple:
     if auth_required and 'token' in request.headers:
         token = request.headers['token']
         user = User.query.filter(User.token == token).first()
+
         if user is None:
-            return jsonify({'error': 'not a valid token'}), 401
+            return jsonify({'error': 'not a valid token'}), 403
         else:
             g.user_id = user.mongo_id
             g.is_admin = user.adminRights
     elif auth_required and 'token' not in request.headers:
-        return jsonify({'error': 'no token provided'})
+        return jsonify({'error': 'no token provided'}), 403
 
 
 @flask_app.route('/', methods=['GET'])
