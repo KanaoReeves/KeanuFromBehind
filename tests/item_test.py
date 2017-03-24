@@ -67,3 +67,7 @@ class TestItemRoute(unittest.TestCase):
         )
         json_data = json.loads(result.data)
         self.assertTrue(json_data['data']['success'] is not None, 'fail delete item')
+
+    def test_admin_update(self):
+        # add item to
+        item = self.test_admin_add_item()
