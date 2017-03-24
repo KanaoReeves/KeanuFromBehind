@@ -3,7 +3,6 @@ import json
 from flask import Blueprint, jsonify, request, g
 from flask_autodoc import Autodoc
 
-
 order_api = Blueprint('orderApi', __name__)
 
 auto = Autodoc()
@@ -46,18 +45,30 @@ def get_user_orders() -> dict:
 @order_api.route('/order/add', methods=['POST'])
 @auto.doc()
 def add_order() -> tuple:
-    from keanu.models.orders import Order
+    from keanu.models.orders import Order, ItemQuantity
 
     if request.json is not None:
         # find specific item
+        items = []
+
+        for item in request.json['items']:
+            key, value = item.popitem()
+            items.append(ItemQuantity(itemId=key, quantity=value))
+
         new_order = Order(
-            items=request.json['items'],
-            total=float(request.json['total']),
+            items=items,
+            total=request.json['price'],
             userId=str(g.user_id),
-            delivery=bool(request.json['delivery']),
-            date=float(request.json['date'])
+            delivery=request.json['delivery'],
+            date=request.json['date']
         )
         new_order.save()
-        return jsonify({'data': {'orders': request.json}})
+        # returns a message
+        return jsonify({'data':
+            {
+                'message': 'order added with id ' + str(new_order.mongo_id),
+                'orderId': str(new_order.mongo_id)
+            }
+        })
     else:
         return jsonify({'error': 'no order placed'}), 401
