@@ -53,12 +53,12 @@ def before_request() -> tuple:
         user = User.query.filter(User.token == token).first()
 
         if user is None:
-            return jsonify({'error': 'not a valid token'}), 401
+            return jsonify({'error': 'not a valid token'}), 403
         else:
             g.user_id = user.mongo_id
             g.is_admin = user.adminRights
     elif auth_required and 'token' not in request.headers:
-        return jsonify({'error': 'no token provided'})
+        return jsonify({'error': 'no token provided'}), 403
 
 
 @flask_app.route('/', methods=['GET'])
