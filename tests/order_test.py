@@ -38,11 +38,10 @@ class TestOrderRoute(unittest.TestCase):
         added_order = Order.query.get(json_response['data']['orderId'])
         added_order.remove()
 
-    # def test_get_user_orders(self):
-    #     login = self.app.post('/login', headers={'username': 'steve', 'password': 'smith'})
-    #     json_response = json.loads(login.data)
-    #     if json_response['data']['token'] is not None:
-    #          result = self.app.get('/order', headers={
-    #             'token': json_response['data']['token']})
-    #          json_data = json.loads(result.data)
-    #          self.assertTrue(len(json_data['data']['orders']) is not None, "no orders in db")
+    def test_get_user_orders(self):
+        login = self.app.post('/login', headers={'username': 'steve', 'password': 'smith'})
+        json_response = json.loads(login.data)['data']['token']
+        self.assertIsNotNone(json_response)
+        result = self.app.get('/order', headers={'token': json_response})
+        json_data = json.loads(result.data)
+        self.assertIsNotNone(len(json_data), 'no orders in db')
