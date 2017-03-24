@@ -31,11 +31,13 @@ def get_user_orders() -> dict:
     orders_list = []
     # create response
     for order in orders:
+        items_list=[]
+        for item in order.items:
+            items_list.append({'itemId': item.itemId,'quantity': item.itemId})
         orders_list.append({
             "_id": str(order.mongo_id),
-            "items": str(json.dumps(order.items)),
+            "items": items_list,
             "total": str(order.total),
-            "userId": str(order.userId),
             "delivery": str(order.delivery),
             "date": order.date
         })
