@@ -40,25 +40,29 @@ def before_request() -> tuple:
     Checks if a token header in requests
     :return:
     """
-    from keanu.models.users import User
-    no_auth_paths = ['/spec', '/favicon.ico', '/item', '/login']
-    auth_required = True
-    for path in no_auth_paths:
-        if request.path.startswith(path):
-            auth_required = False
-    if '/' is request.path:
-        auth_required = False
-    if auth_required and 'token' in request.headers:
-        token = request.headers['token']
-        user = User.query.filter(User.token == token).first()
+    if request.method == 'GET' or request.method == 'POST':
+        flask_app.logger.log(10, 'Headers: %s', request.headers)
+        flask_app.logger.log(10, 'Body: %s', request.get_data())
 
-        if user is None:
-            return jsonify({'error': 'not a valid token'}), 403
-        else:
-            g.user_id = user.mongo_id
-            g.is_admin = user.adminRights
-    elif auth_required and 'token' not in request.headers:
-        return jsonify({'error': 'no token provided'}), 403
+        from keanu.models.users import User
+        no_auth_paths = ['/spec', '/favicon.ico', '/item', '/login']
+        auth_required = True
+        for path in no_auth_paths:
+            if request.path.startswith(path):
+                auth_required = False
+        if '/' is request.path:
+            auth_required = False
+        if auth_required and 'token' in request.headers:
+            token = request.headers['token']
+            user = User.query.filter(User.token == token).first()
+
+            if user is None:
+                return jsonify({'error': 'not a valid token'}), 403
+            else:
+                g.user_id = user.mongo_id
+                g.is_admin = user.adminRights
+        elif auth_required and 'token' not in request.headers:
+            return jsonify({'error': 'no token provided'}), 403
 
 
 @flask_app.route('/', methods=['GET'])
