@@ -103,7 +103,7 @@ def add_new_item() -> tuple:
 
         return jsonify({'data': {'item': request.json, 'itemId': str(new_item.mongo_id)}})
     else:
-        return jsonify({'error': 'invalid item'+request.json}), 403
+        return jsonify({'error': 'invalid item' + request.json}), 403
 
 
 @item_api.route('/admin/item/delete/<item_id>', methods=['POST'])
@@ -117,4 +117,38 @@ def delete_item(item_id):
         item.remove()
         return jsonify({'data': {'success': True}})
     else:
-        return jsonify({'error': 'No item found with id '+item_id})
+        return jsonify({'error': 'No item found with id ' + item_id})
+
+
+@item_api.route('/admin/item/update', methods=['POST'])
+@auto.doc()
+def update_item():
+    from keanu.models.items import Item
+
+    if request.json is not None:
+        item_update = Item.query.get(request.json['_id'])
+        item_update.calories = request.json['calories']
+        item_update.category = request.json['category']
+        item_update.description = request.json['description']
+        item_update.imageURL = request.json['imageURL']
+        item_update.name = request.json['name']
+        item_update.price = request.json['price']
+        item_update.tags = request.json['tags']
+
+        item_update.save()
+
+        item = {
+            '_id': item_update.mongo_id,
+            'name': item_update.name,
+            'description': item_update.description,
+            'imageURL': item_update.imageURL,
+            'price': item_update.price,
+            'calories': item_update.calories,
+            'category': item_update.category
+        }
+
+        return jsonify({'data': {'message': 'Updated with item id: ' + str(item_update.mongo_id),
+                                 'mongo_id': str(item_update.mongo_id)}
+                        })
+    else:
+        return jsonify({'error': 'item not updated'})

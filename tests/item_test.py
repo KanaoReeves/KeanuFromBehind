@@ -56,7 +56,7 @@ class TestItemRoute(unittest.TestCase):
 
         json_data = json.loads(result.data)
         self.assertTrue(json_data['data']['item'] is not None, 'item not added')
-        return {'id': json_data['data']['itemId'], 'token': admin_token}
+        return {'id': json_data['data']['itemId'], 'token': admin_token, 'item': json_data['data']['item']}
 
     def test_admin_del_item(self):
         # add an item to delete
@@ -67,3 +67,14 @@ class TestItemRoute(unittest.TestCase):
         )
         json_data = json.loads(result.data)
         self.assertTrue(json_data['data']['success'] is not None, 'fail delete item')
+
+    def test_admin_update_item(self):
+        # add item to
+        item = self.test_admin_add_item()
+        item['item']['_id'] = item['id']
+        item['item']['name'] = 'updated name'
+        result = self.app.post('/admin/item/update',
+                               headers={'Content-Type': 'application/json', 'token': item['token']},
+                               data=json.dumps(item['item'])
+                               )
+        self.assertIsNotNone(json.loads(result.data)['data'], 'no data from admin item update')
