@@ -89,7 +89,9 @@ def get_item_by_category(category) -> tuple:
 @auto.doc()
 def search_item() -> tuple:
     """
-    
+    Searches items if query less that 3 
+    it only searches the name else it will
+    search the names and tags
     :return: 
     """
     from keanu.models.items import Item
