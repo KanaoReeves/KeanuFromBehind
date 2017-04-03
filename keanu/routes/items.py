@@ -85,6 +85,44 @@ def get_item_by_category(category) -> tuple:
     return jsonify({'data': {'items': items_list}})
 
 
+@item_api.route('/item/search', methods=['GET'])
+@auto.doc()
+def search_item() -> tuple:
+    """
+    
+    :return: 
+    """
+    from keanu.models.items import Item
+    items_list = []
+    query: str = request.args['q']
+
+    if not len(query) > 0:
+        return jsonify({'error': 'no search results provided'})
+
+    query = query.title()
+    items = Item.query.filter(Item.name.startswith(query.lower())).all()
+    if len(query) > 3:
+        items = items + Item.query.filter(Item.tags.startswith(query.lower())).all()
+
+    unique_ids = []
+
+    for item in items:
+        if str(item.mongo_id) not in unique_ids:
+            items_list.append({
+                "_id": str(item.mongo_id),
+                "name": item.name,
+                "description": item.description,
+                "imageURL": item.imageURL,
+                "price": item.price,
+                "calories": item.calories,
+                "category": item.category,
+                "tags": item.tags
+            })
+            unique_ids.append(str(item.mongo_id))
+
+    return jsonify({'data': {'items': items_list}})
+
+
 @item_api.route('/admin/item/add', methods=['POST'])
 @auto.doc()
 def add_new_item() -> tuple:
