@@ -33,17 +33,13 @@ class TestCustomerInfo(unittest.TestCase):
         json_data = json.loads(result.data)
         self.assertTrue(json_data['data']['paymentInfo'] is not None, 'no payment info')
 
-    def test_get_user_info(self):
-        #data = '{"address": {"name": "Main", "number": 123, "postalCode": "M3E5R1", "streetType": "Street"}, ' \
-        #      '"adminRights": false, "displayName": {"firstName": "Aaron", "lastName": "Smith"}, ' \
-        #     '"email": "example@example.com", "password": "smith", "paymentInfo": {"cardType": "VISA", ' \
-        #    '"expiry": "1/1/17 12:00:00 AM UTC", "name": "steve Smith", "num": 451535486}, "username": "steve"}'
+    def test_get_customer_info(self):
+
         token = self.login()
         result = self.app.get('/customer/profile', headers={'token': token})
-        #json_data = json.loads(result.data)
         self.assertIsNotNone(result,  'No user info')
 
-    def test_user_profile_update(self):
+    def test_customer_profile_update(self):
         from keanu.models.users import User
 
         #creating new user
@@ -62,7 +58,7 @@ class TestCustomerInfo(unittest.TestCase):
                '"email": "example@example.com", "password": "password", "paymentInfo": {"cardType": "VISA", ' \
                '"expiry": "1/1/17 12:00:00 AM UTC", "name": "Jane Doe", "num": 451535486}, "username": "Jane"}'
 
-        result = self.app.post('/customer/profile/edit', data = updated_data,  headers={'token': json_response})
+        result = self.app.post('/customer/profile/edit', data=updated_data,  headers={'token': json_response})
         json_data = json.loads(result.data)
         self.assertIsNotNone(len(json_data))
         user = User.query.filter(User.token == json_response).first()
