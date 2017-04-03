@@ -6,6 +6,7 @@ item_api = Blueprint('itemApi', __name__)
 
 auto = Autodoc()
 
+
 def get_item_as_object(item):
     return {
         "_id": str(item.mongo_id),
@@ -44,6 +45,7 @@ def get_all_items() -> dict:
     for item in items:
         items_list.append(get_item_as_object(item))
     return jsonify({'data': {'items': items_list}})
+
 
 @item_api.route('/item/id/<id>', methods=['GET'])
 @auto.doc()
@@ -178,16 +180,6 @@ def update_item():
         item_update.tags = request.json['tags']
 
         item_update.save()
-
-        item = {
-            '_id': item_update.mongo_id,
-            'name': item_update.name,
-            'description': item_update.description,
-            'imageURL': item_update.imageURL,
-            'price': item_update.price,
-            'calories': item_update.calories,
-            'category': item_update.category
-        }
 
         return jsonify({'data': {'message': 'Updated with item id: ' + str(item_update.mongo_id),
                                  'mongo_id': str(item_update.mongo_id)}
