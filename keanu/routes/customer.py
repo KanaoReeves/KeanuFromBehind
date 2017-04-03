@@ -46,15 +46,40 @@ def customer_profile_info() -> dict:
     Gets a customers profile info
     :return:
     """
-    from keanu.models.users import User
-    user = User.query.get(g.user_id)
+    from keanu.models.users import User, UserFullName, PaymentInfo, Address
+    request = User.query.get(g.user_id)
+    user_info = dict(
+        username=request.username,
+        password=request.password,
+        displayName=dict(
+            firstName=request.displayName.firstName,
+            lastName=request.displayName.lastName
+        ),
+        email=request.email,
 
-    return jsonify(user)
+        paymentInfo=dict(
+            name=request.paymentInfo.name,
+            cardType=request.paymentInfo.cardType,
+            num=int(request.paymentInfo.num),
+            expiry=request.paymentInfo.expiry
+        ),
+        address=dict(
+            number=int(request.address.number),
+            name=request.address.name,
+            streetType=request.address.streetType,
+            postalCode=request.address.postalCode
+        )
+    )
 
-@customer_api.route('customer/profile/edit', methods=['POST'])
+    return jsonify({'data': {
+        'user': user_info
+    }
+    })
+
+
+@customer_api.route('/customer/profile/edit', methods=['POST'])
 @auto.doc()
 def customer_profile_update() -> dict:
-    from keanu.models.users import User
 
     if request.json is not None:
 
@@ -90,15 +115,24 @@ def customer_profile_update() -> dict:
         #     '_id':  user_update.mongo_id,
         #     'username':  user_update.name,
         #     'password': user_update.password,
-        #     'displayName': {'firstName': user_update.displayName.displayName, 'lastName': user_update.displayName.lastName},
+        #     'displayName': {
+        #           'firstName': user_update.displayName.displayName,
+        #           'lastName': user_update.displayName.lastName},
         #     'email':  user_update.email,
-        #     'paymentInfo': { 'name': user_update.paymentInfo.name, 'cardType': , 'num': , 'cvNum': , 'expiry': },
-        #     'address':  user_update.address
+        #     'paymentInfo': {
+        #           'name': user_update.paymentInfo.name,
+        #           'cardType': ,
+        #           'num': ,
+        #           'cvNum': ,
+        #           'expiry': },
+        #     'address':  {
+        #           'number' : int(user_update.address.number),
+        #           'name': user_update.address.name,
+        #           'streetType': user_update.address.streetType,
+        #           'postalCode': user_update.address.postalCode}
         # }
 
-        return jsonify({'data': {'message': 'Updated with item id: ' + str(user_update.mongo_id),
-                                 'mongo_id': str(user_update.mongo_id)}
-                        })
+        return jsonify({'data': { 'user': user_update}})
     else:
         return jsonify({'error': 'user not updated'})
 
