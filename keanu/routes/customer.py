@@ -46,7 +46,7 @@ def customer_profile_info() -> dict:
     Gets a customers profile info
     :return:
     """
-    from keanu.models.users import User, UserFullName, PaymentInfo, Address
+    from keanu.models.users import User
     request = User.query.get(g.user_id)
     user_info = dict(
         username=request.username,
@@ -84,6 +84,7 @@ def customer_profile_update() -> dict:
     if request.json is not None:
 
         from keanu.models.users import User, UserFullName, PaymentInfo, Address
+        #readd the the user to the db
         if request.json is not None:
             user_update = User(
                 username=request.json['username'],
