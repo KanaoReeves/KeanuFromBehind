@@ -99,8 +99,7 @@ def customer_profile_update() -> dict:
                     name=request.json['paymentInfo']['name'],
                     cardType=request.json['paymentInfo']['cardType'],
                     num=int(request.json['paymentInfo']['num']),
-                    expiry=datetime.datetime.strptime(request.json['paymentInfo']['expiry'],
-                                                      "%w/%m/%y %I:%M:%S %p UTC")
+                    expiry=datetime.datetime.strptime(request.json['paymentInfo']['expiry'], "%w/%m/%y %I:%M:%S %p UTC")
                 ),
                 address=Address(
                     number=int(request.json['address']['number']),
