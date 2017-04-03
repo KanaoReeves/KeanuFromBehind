@@ -87,25 +87,28 @@ def customer_profile_update() -> dict:
         #readd the the user to the db
         if request.json is not None:
             user_update = User(
-                username=request.json['username'],
-                password=request.json['password'],
-                displayName=UserFullName(
-                    firstName=request.json['displayName']['firstName'],
-                    lastName=request.json['displayName']['lastName']
+                username= request.json['username'],
+                password= request.json['password'],
+                displayName= UserFullName(
+                    firstName= request.json['displayName']['firstName'],
+                    lastName= request.json['displayName']['lastName']
                 ),
-                email=request.json['email'],
-                adminRights=request.json['adminRights'],
-                paymentInfo=PaymentInfo(
-                    name=request.json['paymentInfo']['name'],
-                    cardType=request.json['paymentInfo']['cardType'],
-                    num=int(request.json['paymentInfo']['num']),
-                    expiry=datetime.datetime.strptime(request.json['paymentInfo']['expiry'], "%w/%m/%y %I:%M:%S %p UTC")
+
+                email= request.json['email'],
+                adminRights= request.json['adminRights'],
+
+                paymentInfo= PaymentInfo(
+                    name= request.json['paymentInfo']['name'],
+                    cardType= request.json['paymentInfo']['cardType'],
+                    num= int(request.json['paymentInfo']['num']),
+                    expiry= datetime.datetime.strptime(request.json['paymentInfo']['expiry'], "%w/%m/%y %I:%M:%S %p UTC")
                 ),
-                address=Address(
-                    number=int(request.json['address']['number']),
-                    name=request.json['address']['name'],
-                    streetType=request.json['address']['streetType'],
-                    postalCode=request.json['address']['postalCode']
+
+                address= Address(
+                    number= int(request.json['address']['number']),
+                    name= request.json['address']['name'],
+                    streetType= request.json['address']['streetType'],
+                    postalCode= request.json['address']['postalCode']
                 )
             )
 
