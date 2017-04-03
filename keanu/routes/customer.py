@@ -132,8 +132,6 @@ def customer_profile_update() -> dict:
         #           'postalCode': user_update.address.postalCode}
         # }
 
-        return jsonify({'data': { 'user': user_update}})
+        return jsonify({'data': {'user': user_update}})
     else:
         return jsonify({'error': 'user not updated'})
-
-
