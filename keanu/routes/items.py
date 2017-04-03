@@ -6,6 +6,18 @@ item_api = Blueprint('itemApi', __name__)
 
 auto = Autodoc()
 
+def get_item_as_object(item):
+    return {
+        "_id": str(item.mongo_id),
+        "name": item.name,
+        "description": item.description,
+        "imageURL": item.imageURL,
+        "price": item.price,
+        "calories": item.calories,
+        "category": item.category,
+        "tags": item.tags
+    }
+
 
 @item_api.route('/item/spec')
 def login_doc():
@@ -30,18 +42,8 @@ def get_all_items() -> dict:
     items_list = []
     # create response
     for item in items:
-        items_list.append({
-            "_id": str(item.mongo_id),
-            "name": item.name,
-            "description": item.description,
-            "imageURL": item.imageURL,
-            "price": item.price,
-            "calories": item.calories,
-            "category": item.category,
-            "tags": item.tags
-        })
+        items_list.append(get_item_as_object(item))
     return jsonify({'data': {'items': items_list}})
-
 
 @item_api.route('/item/id/<id>', methods=['GET'])
 @auto.doc()
