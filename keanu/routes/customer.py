@@ -109,28 +109,7 @@ def customer_profile_update() -> dict:
                 )
             )
 
-        user_update.save()
-
-        # user = {
-        #     '_id':  user_update.mongo_id,
-        #     'username':  user_update.name,
-        #     'password': user_update.password,
-        #     'displayName': {
-        #           'firstName': user_update.displayName.displayName,
-        #           'lastName': user_update.displayName.lastName},
-        #     'email':  user_update.email,
-        #     'paymentInfo': {
-        #           'name': user_update.paymentInfo.name,
-        #           'cardType': ,
-        #           'num': ,
-        #           'cvNum': ,
-        #           'expiry': },
-        #     'address':  {
-        #           'number' : int(user_update.address.number),
-        #           'name': user_update.address.name,
-        #           'streetType': user_update.address.streetType,
-        #           'postalCode': user_update.address.postalCode}
-        # }
+            user_update.save()
 
         return jsonify({'data': {'user': user_update}})
     else:
