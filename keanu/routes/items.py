@@ -7,6 +7,19 @@ item_api = Blueprint('itemApi', __name__)
 auto = Autodoc()
 
 
+def get_item_as_object(item):
+    return {
+        "_id": str(item.mongo_id),
+        "name": item.name,
+        "description": item.description,
+        "imageURL": item.imageURL,
+        "price": item.price,
+        "calories": item.calories,
+        "category": item.category,
+        "tags": item.tags
+    }
+
+
 @item_api.route('/item/spec')
 def login_doc():
     """
@@ -30,16 +43,7 @@ def get_all_items() -> dict:
     items_list = []
     # create response
     for item in items:
-        items_list.append({
-            "_id": str(item.mongo_id),
-            "name": item.name,
-            "description": item.description,
-            "imageURL": item.imageURL,
-            "price": item.price,
-            "calories": item.calories,
-            "category": item.category,
-            "tags": item.tags
-        })
+        items_list.append(get_item_as_object(item))
     return jsonify({'data': {'items': items_list}})
 
 
@@ -82,6 +86,46 @@ def get_item_by_category(category) -> tuple:
             "category": item.category,
             "tags": item.tags
         })
+    return jsonify({'data': {'items': items_list}})
+
+
+@item_api.route('/item/search', methods=['GET'])
+@auto.doc()
+def search_item() -> tuple:
+    """
+    Searches items if query less that 3 
+    it only searches the name else it will
+    search the names and tags
+    :return: 
+    """
+    from keanu.models.items import Item
+    items_list = []
+    query: str = request.args['q']
+
+    if not len(query) > 0:
+        return jsonify({'error': 'no search results provided'})
+
+    query = query.title()
+    items = Item.query.filter(Item.name.startswith(query.lower())).all()
+    if len(query) > 3:
+        items = items + Item.query.filter(Item.tags.startswith(query.lower())).all()
+
+    unique_ids = []
+
+    for item in items:
+        if str(item.mongo_id) not in unique_ids:
+            items_list.append({
+                "_id": str(item.mongo_id),
+                "name": item.name,
+                "description": item.description,
+                "imageURL": item.imageURL,
+                "price": item.price,
+                "calories": item.calories,
+                "category": item.category,
+                "tags": item.tags
+            })
+            unique_ids.append(str(item.mongo_id))
+
     return jsonify({'data': {'items': items_list}})
 
 
@@ -136,16 +180,6 @@ def update_item():
         item_update.tags = request.json['tags']
 
         item_update.save()
-
-        item = {
-            '_id': item_update.mongo_id,
-            'name': item_update.name,
-            'description': item_update.description,
-            'imageURL': item_update.imageURL,
-            'price': item_update.price,
-            'calories': item_update.calories,
-            'category': item_update.category
-        }
 
         return jsonify({'data': {'message': 'Updated with item id: ' + str(item_update.mongo_id),
                                  'mongo_id': str(item_update.mongo_id)}
