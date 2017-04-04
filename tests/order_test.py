@@ -32,7 +32,7 @@ class TestOrderRoute(unittest.TestCase):
                '{"58d13f3e63ae2507c70a7d5e": 1}' \
                '],"price": 25.06}'
 
-        result = self.app.post('/order/add', headers={'token': json_login['data']['token']}, data=data, content_type='application/json')
+        result = self.app.post('/order/add/', headers={'token': json_login['data']['token']}, data=data, content_type='application/json')
         json_response = json.loads(result.data)
         self.assertIsNotNone(json_response['data']['orderId'], 'error in response')
         added_order = Order.query.get(json_response['data']['orderId'])
