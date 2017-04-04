@@ -1,5 +1,5 @@
-import unittest, json
-from keanu.app import flask_app, flask_db as db
+import unittest
+from keanu.app import flask_app
 from keanu.models.users import User, UserFullName, PaymentInfo, Address
 import datetime
 
