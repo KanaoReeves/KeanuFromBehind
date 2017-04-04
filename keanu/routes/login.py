@@ -10,7 +10,7 @@ login_api = Blueprint('loginApi', __name__)
 auto = Autodoc()
 
 
-@login_api.route('/login/spec')
+@login_api.route('/login/spec', strict_slashes=False)
 def login_doc():
     """
     Documentation for the /login route
@@ -19,7 +19,7 @@ def login_doc():
     return auto.html()
 
 
-@login_api.route('/login/register', methods=['POST'])
+@login_api.route('/login/register', strict_slashes=False, methods=['POST'])
 @auto.doc()
 def register() -> tuple:
     """
@@ -58,7 +58,7 @@ def register() -> tuple:
         return jsonify({'error': 'no username or password provided'}), 401
 
 
-@login_api.route('/login', methods=['POST'])
+@login_api.route('/login', strict_slashes=False, methods=['POST'])
 @auto.doc()
 def login() -> tuple:
     """

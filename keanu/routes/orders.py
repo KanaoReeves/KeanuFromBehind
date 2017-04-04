@@ -8,7 +8,7 @@ order_api = Blueprint('orderApi', __name__)
 auto = Autodoc()
 
 
-@order_api.route('/order/spec')
+@order_api.route('/order/spec', strict_slashes=False)
 def order_doc():
     """
     Documentation for the /order route
@@ -17,7 +17,7 @@ def order_doc():
     return auto.html()
 
 
-@order_api.route('/order', methods=['GET'])
+@order_api.route('/order', strict_slashes=False, methods=['GET'])
 @auto.doc()
 def get_user_orders() -> dict:
     """
@@ -44,7 +44,7 @@ def get_user_orders() -> dict:
     return jsonify({'data': {'orders': orders_list}})
 
 
-@order_api.route('/order/add', methods=['POST'])
+@order_api.route('/order/add', strict_slashes=False, methods=['POST'])
 @auto.doc()
 def add_order() -> tuple:
     from keanu.models.orders import Order, ItemQuantity

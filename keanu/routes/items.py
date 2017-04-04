@@ -20,7 +20,7 @@ def get_item_as_object(item):
     }
 
 
-@item_api.route('/item/spec')
+@item_api.route('/item/spec', strict_slashes=False)
 def login_doc():
     """
     Documentation for the /item route
@@ -29,7 +29,7 @@ def login_doc():
     return auto.html()
 
 
-@item_api.route('/item', methods=['GET'])
+@item_api.route('/item', strict_slashes=False, methods=['GET'])
 @auto.doc()
 def get_all_items() -> dict:
     """
@@ -47,7 +47,7 @@ def get_all_items() -> dict:
     return jsonify({'data': {'items': items_list}})
 
 
-@item_api.route('/item/id/<id>', methods=['GET'])
+@item_api.route('/item/id/<id>', strict_slashes=False, methods=['GET'])
 @auto.doc()
 def get_item_by_id(id) -> tuple:
     from keanu.models.items import Item
@@ -66,7 +66,7 @@ def get_item_by_id(id) -> tuple:
     return jsonify({'data': {'item': item_json}})
 
 
-@item_api.route('/item/category/<category>', methods=['GET'])
+@item_api.route('/item/category/<category>', strict_slashes=False, methods=['GET'])
 @auto.doc()
 def get_item_by_category(category) -> tuple:
     from keanu.models.items import Item
@@ -89,7 +89,7 @@ def get_item_by_category(category) -> tuple:
     return jsonify({'data': {'items': items_list}})
 
 
-@item_api.route('/item/search', methods=['GET'])
+@item_api.route('/item/search', strict_slashes=False, methods=['GET'])
 @auto.doc()
 def search_item() -> tuple:
     """
@@ -129,7 +129,7 @@ def search_item() -> tuple:
     return jsonify({'data': {'items': items_list}})
 
 
-@item_api.route('/admin/item/add', methods=['POST'])
+@item_api.route('/admin/item/add', strict_slashes=False, methods=['POST'])
 @auto.doc()
 def add_new_item() -> tuple:
     from keanu.models.items import Item
@@ -150,7 +150,7 @@ def add_new_item() -> tuple:
         return jsonify({'error': 'invalid item' + request.json}), 403
 
 
-@item_api.route('/admin/item/delete/<item_id>', methods=['POST'])
+@item_api.route('/admin/item/delete/<item_id>', strict_slashes=False, methods=['POST'])
 @auto.doc()
 def delete_item(item_id):
     from keanu.models.items import Item
@@ -164,7 +164,7 @@ def delete_item(item_id):
         return jsonify({'error': 'No item found with id ' + item_id})
 
 
-@item_api.route('/admin/item/update', methods=['POST'])
+@item_api.route('/admin/item/update', strict_slashes=False, methods=['POST'])
 @auto.doc()
 def update_item():
     from keanu.models.items import Item
