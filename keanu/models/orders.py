@@ -14,5 +14,3 @@ class Order(db.Document):
     userId = db.StringField(required=True)
     delivery = db.BoolField(required=True)
     date = db.StringField(required=True)
-
-
