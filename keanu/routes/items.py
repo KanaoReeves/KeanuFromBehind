@@ -53,16 +53,7 @@ def get_item_by_id(id) -> tuple:
     from keanu.models.items import Item
     # find specific item
     item = Item.query.filter(Item.mongo_id == id).first()
-    item_json = {
-        "_id": str(item.mongo_id),
-        "name": item.name,
-        "description": item.description,
-        "imageURL": item.imageURL,
-        "price": item.price,
-        "calories": item.calories,
-        "category": item.category,
-        "tags": item.tags
-    }
+    item_json = get_item_as_object(item)
     return jsonify({'data': {'item': item_json}})
 
 
@@ -76,16 +67,7 @@ def get_item_by_category(category) -> tuple:
     items_list = []
     # create response
     for item in items:
-        items_list.append({
-            "_id": str(item.mongo_id),
-            "name": item.name,
-            "description": item.description,
-            "imageURL": item.imageURL,
-            "price": item.price,
-            "calories": item.calories,
-            "category": item.category,
-            "tags": item.tags
-        })
+        items_list.append(get_item_as_object(item))
     return jsonify({'data': {'items': items_list}})
 
 
