@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import json
+from datetime import datetime
 from flask import Blueprint, jsonify, request, g
 from flask_autodoc import Autodoc
 
@@ -31,22 +32,29 @@ def get_user_orders() -> dict:
     orders_list = []
     # create response
     for order in orders:
-        items_list=[]
+        items_list = []
         for item in order.items:
-            items_list.append({'itemId': item.itemId,'quantity': item.itemId})
+            items_list.append({'itemId': item.itemId, 'quantity': item.itemId})
         orders_list.append({
             "_id": str(order.mongo_id),
             "items": items_list,
             "total": str(order.total),
             "delivery": str(order.delivery),
-            "date": order.date
+            "date": datetime.strptime(order.date, '%d:%m:%Y')
         })
+
+    orders_list.sort(key=lambda o: o['date'], reverse=True)
+    print(orders_list)
     return jsonify({'data': {'orders': orders_list}})
 
 
 @order_api.route('/order/add', strict_slashes=False, methods=['POST'])
 @auto.doc()
 def add_order() -> tuple:
+    """
+    Adds a new order to the database 
+    :return: 
+    """
     from keanu.models.orders import Order, ItemQuantity
 
     if request.json is not None:
@@ -66,10 +74,9 @@ def add_order() -> tuple:
         )
         new_order.save()
         # returns a message
-        return jsonify({'data':
-            {
-                'message': 'order added with id ' + str(new_order.mongo_id),
-                'orderId': str(new_order.mongo_id)
+        return jsonify({'data': {
+            'message': 'order added with id ' + str(new_order.mongo_id),
+            'orderId': str(new_order.mongo_id)
             }
         })
     else:
