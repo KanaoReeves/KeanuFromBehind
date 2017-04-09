@@ -47,6 +47,10 @@ def get_user_orders() -> dict:
 @order_api.route('/order/add', strict_slashes=False, methods=['POST'])
 @auto.doc()
 def add_order() -> tuple:
+    """
+    Adds a new order to the database 
+    :return: 
+    """
     from keanu.models.orders import Order, ItemQuantity
 
     if request.json is not None:
