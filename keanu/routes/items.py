@@ -47,12 +47,12 @@ def get_all_items() -> dict:
     return jsonify({'data': {'items': items_list}})
 
 
-@item_api.route('/item/id/<id>', strict_slashes=False, methods=['GET'])
+@item_api.route('/item/id/<item_id>', strict_slashes=False, methods=['GET'])
 @auto.doc()
-def get_item_by_id(id) -> tuple:
+def get_item_by_id(item_id) -> tuple:
     from keanu.models.items import Item
     # find specific item
-    item = Item.query.filter(Item.mongo_id == id).first()
+    item = Item.query.filter(Item.mongo_id == item_id).first()
     item_json = get_item_as_object(item)
     return jsonify({'data': {'item': item_json}})
 
