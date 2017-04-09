@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import json
 from flask import Blueprint, jsonify, request, g
 from flask_autodoc import Autodoc
 
@@ -69,6 +70,17 @@ def get_item_by_category(category) -> tuple:
     for item in items:
         items_list.append(get_item_as_object(item))
     return jsonify({'data': {'items': items_list}})
+
+
+@item_api.route('/item/category/<category>/count', strict_slashes=False, methods=['GET'])
+def get_category_count(category) -> tuple:
+    """
+    Returns the number items in that category 
+    :param category: 
+    :return: 
+    """
+    json_response = get_item_by_category(category)
+    return jsonify({'data': {'count': len(json.loads(json_response.data)['data']['items'])}})
 
 
 @item_api.route('/item/search', strict_slashes=False, methods=['GET'])
