@@ -32,7 +32,7 @@ class TestItemRoute(unittest.TestCase):
         self.assertTrue(len(json_data['data']['items']) > 1, 'no items in db')
 
     def test_get_item_by_id(self):
-        result = self.app.get('/item/id/58be0265f188127b8fd2af52')
+        result = self.app.get('/item/id/58be0265f188127b8fd2af54')
         json_data = json.loads(result.data)
         self.assertTrue(json_data['data']['item'] is not None, 'no item by id found')
 
