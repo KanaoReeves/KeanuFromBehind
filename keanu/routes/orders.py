@@ -44,7 +44,6 @@ def get_user_orders() -> dict:
         })
 
     orders_list.sort(key=lambda o: o['date'], reverse=True)
-    print(orders_list)
     return jsonify({'data': {'orders': orders_list}})
 
 
