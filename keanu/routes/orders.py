@@ -34,7 +34,7 @@ def get_user_orders() -> dict:
     for order in orders:
         items_list = []
         for item in order.items:
-            items_list.append({'itemId': item.itemId, 'quantity': item.itemId})
+            items_list.append({'itemId': item.itemId, 'quantity': item.quantity})
         orders_list.append({
             "_id": str(order.mongo_id),
             "items": items_list,
