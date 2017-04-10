@@ -73,7 +73,8 @@ def add_order() -> tuple:
             date=request.json['date']
         )
         new_order.save()
-        send_notification(request.json['pushUserId'])
+        if 'pushUserId' in request.json:
+            send_notification(request.json['pushUserId'])
         # returns a message
         return jsonify({'data': {
             'message': 'order added with id ' + str(new_order.mongo_id),
